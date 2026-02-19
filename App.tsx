@@ -12,6 +12,14 @@ const RESUME_EMBED = "https://drive.google.com/file/d/147evtKYh90pDQuHeGWVwGcIU-
 const PROFILE_IMAGE = "https://lh3.googleusercontent.com/d/1mwrzo0RRK1nqIp1-R0wVFHBZ9pyUc4S3";
 const HERO_BG_IMAGE = "https://photos.fife.usercontent.com/pw/AP1GczONX91QH4qH4ifrYx0MCdiRzbKGE_uf8bmqYnauUjBNCc0V1eDwIXa7Og=w1699-h948-s-no-gm?authuser=0";
 
+// --- Helper Functions ---
+const scrollToSection = (id: string) => {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 // --- Components ---
 
 const VideoModal: React.FC<{ project: Project | null; onClose: () => void }> = ({ project, onClose }) => {
@@ -51,7 +59,6 @@ const VideoModal: React.FC<{ project: Project | null; onClose: () => void }> = (
           >
             <X size={44} strokeWidth={1} />
           </button>
-
           <motion.div
             initial={{ scale: 0.98, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -148,11 +155,8 @@ const Navbar: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const handleNavClick = (id: string) => {
+    scrollToSection(id);
     setIsOpen(false);
   };
 
@@ -166,7 +170,7 @@ const Navbar: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md py-4' : 'bg-transparent py-8'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <button 
-          onClick={() => scrollToSection('home')} 
+          onClick={() => handleNavClick('home')} 
           className="text-xl font-bold tracking-tighter flex items-center gap-2 outline-none group"
         >
           <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center group-hover:bg-orange-500 transition-colors">
@@ -179,7 +183,7 @@ const Navbar: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
           {menuItems.map((item) => (
             <button 
               key={item.id} 
-              onClick={() => scrollToSection(item.id)} 
+              onClick={() => handleNavClick(item.id)} 
               className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-colors outline-none"
             >
               {item.name}
@@ -204,8 +208,8 @@ const Navbar: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
             {menuItems.map((item) => (
               <button 
                 key={item.id} 
-                onClick={() => scrollToSection(item.id)} 
-                className="text-left text-lg font-bold uppercase tracking-tighter text-zinc-400 hover:text-white transition-colors"
+                onClick={() => handleNavClick(item.id)} 
+                className="text-left text-lg font-bold uppercase tracking-tighter text-zinc-400 hover:text-white transition-colors outline-none"
               >
                 {item.name}
               </button>
@@ -396,7 +400,9 @@ const Footer: React.FC<{ onOpenResume: () => void }> = ({ onOpenResume }) => {
           <button onClick={onOpenResume} className="flex items-center gap-4 px-10 py-5 bg-zinc-900 text-white border border-zinc-800 rounded-full font-black tracking-widest text-xs hover:bg-zinc-800 transition-all"><FileText size={20} /> VIEW RESUME</button>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-10 pt-16 border-t border-zinc-900">
-          <div className="flex items-center gap-3 text-zinc-500 font-medium text-sm"><MapPin size={18} className="text-orange-600" /><span>Dubai, United Arab Emirates</span></div>
+          <button onClick={() => scrollToSection('home')} className="flex items-center gap-3 text-zinc-500 font-medium text-sm outline-none hover:text-white transition-colors">
+            <MapPin size={18} className="text-orange-600" /><span>Dubai, United Arab Emirates</span>
+          </button>
           <div className="flex gap-10 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">
             <a href="https://www.linkedin.com/in/dheerajdharan/" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">LinkedIn</a>
             <span className="text-zinc-700">Behance</span>
